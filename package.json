@@ -1,0 +1,29 @@
+{
+  "name": "reds-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/j-villasante/Reds-Web.git"
+  },
+  "author": "Josué Villasante",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/j-villasante/Reds-Web/issues"
+  },
+  "homepage": "https://github.com/j-villasante/Reds-Web#readme",
+  "devDependencies": {
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.4"
+  },
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "firebase": "^4.6.1",
+    "jquery": "^3.2.1"
+  }
+}
