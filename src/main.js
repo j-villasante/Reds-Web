@@ -1,4 +1,5 @@
 import firebase from 'firebase/app'
+import FileSaver from 'file-saver'
 import 'firebase/auth'
 import 'firebase/database'
 
@@ -82,4 +83,40 @@ function formatData (games) {
     return html
 }
 
+function exportData() {
+    firebase.database().ref('/games')
+        .once('value', gamesListSnap => {
+            let data = []
+            
+            let i  = 1
+            gamesListSnap.forEach(gameSnap => {
+                let j = 1
+                let dateString = gameSnap.child('date').val()
+
+                gameSnap.child('guesses').forEach(guessSnap => {
+                    let guess = guessSnap.val()
+                    let k = 0
+                    let times = []
+
+                    while (guess[k]) {
+                        times.push(guess[k].elapsedTime)
+                        k++
+                    }
+
+                    times.reverse()
+                    
+                    data.push(`${i},${gameSnap.key},${guessSnap.key},${dateString},${guess.word},${j},${k},${times.join(',')}`)
+                    j++
+                })
+                i++
+            })
+            data.push('prueba,game key,guess key,fecha,palabra,numero,cantidad de intentos,intento 1,intento 2,intento 3,intento 4,intento 5')
+            data.reverse()
+            data = data.join('\n')
+            let blob = new Blob([data], {type: 'text/plain;charset=utf-8'})
+            FileSaver.saveAs(blob, `${(new Date()).toJSON()}.csv`)
+        })
+}
+
 $('#button-login-submit').click(doLogin)
+$('#button-download').click(exportData)
