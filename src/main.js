@@ -37,9 +37,11 @@ function getData () {
         .on('value', gamesListSnap => {
             let games = []
             gamesListSnap.forEach(gameSnap => {
+                let value = gameSnap.val()
                 let game = {
-                    date: gameSnap.child('date').val(),
-                    guesses: []
+                    date: value.date,
+                    guesses: [],
+                    type: value.type
                 }
                 gameSnap.child('guesses').forEach(guessSnap => {
                     let guess = guessSnap.val()
@@ -64,16 +66,27 @@ function getData () {
 
 function formatData (games) {
     let html = ''
+    let typeMap = {
+        1: 'FIND_OBJECT',
+        2: 'LEARN_WORDS'
+    }
     for (let game of games) {
         let i = 1
         for (let guess of game.guesses) {
             let dateHtml
-            if (i === 1) dateHtml = game.date
-            else dateHtml = ''
+            let type
+            if (i === 1){
+                dateHtml = game.date
+                type = typeMap[game.type]
+            } else{
+                dateHtml = ''
+                type = ''
+            }
 
             html += `<tr>
                 <th scope="row">${i}</th>
                 <td>${dateHtml}</td>
+                <td>${type}</td>
                 <td>${guess.word}</td>
                 <td>${guess.tries}</td>
             </tr>`
